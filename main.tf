@@ -1,10 +1,10 @@
 provider "aci" {
   # cisco-aci user name
-  username = "admin"
+  username = ""
   # cisco-aci password
-  password = "ajlab.local"
+  password = ""
   # cisco-aci url
-  url      = "https://192.168.253.17"
+  url      = ""
   insecure = true
 }
 
