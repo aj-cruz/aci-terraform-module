@@ -1,17 +1,17 @@
 provider "aci" {
   # cisco-aci user name
-  username = ""
+  username = "admin"
   # cisco-aci password
-  password = ""
+  password = "ajlab.local"
   # cisco-aci url
-  url      = ""
+  url      = "https://192.168.253.17"
   insecure = true
 }
 
 module "tier1" {
   source = "./modules/tier1"
 
-  # VPC Protection Groups
+  # VPC Protection Groups (Domains)
   vpc_protection_groups = {
     group1 = {
       name  = "LEAF1-LEAF2-VPC"
@@ -316,9 +316,78 @@ module "tier3" {
       arp_flood = "yes"
       L2_unknown_unicast = "proxy"
     }
+    bd4 = {
+      name = "VLAN5-BD"
+      tenant_dn = module.tier3.Tenants["TENANT2"]
+      vrf_dn = module.tier3.VRFs["TENANT2/PROD-VRF"]
+      arp_flood = "yes"
+      L2_unknown_unicast = "proxy"
+    }
+  }
+
+  # Application Profiles
+  app_profiles = {
+    app1 = {
+      name = "Production-Network"
+      tenant_dn = module.tier3.Tenants["TENANT1"]
+    }
+    app2 = {
+      name = "Dev-Network"
+      tenant_dn = module.tier3.Tenants["TENANT1"]
+    }
+    app3 = {
+      name = "Production-Network"
+      tenant_dn = module.tier3.Tenants["TENANT2"]
+    }
+  }
+
+  # Application EPGs
+  EPGs = {
+    epg1 = {
+      name = "VLAN5-EPG"
+      annotation = "Tenant1-Production-Network-VLAN5-EPG"
+      application_dn = module.tier3.App-Profiles["TENANT1/Production-Network"]
+      bridge_domain_dn = module.tier3.Bridge-Domains["TENANT1/VLAN5-BD"]
+      pref_gr_memb = "include"
+      domain_dn_list = [module.tier1.PhyDoms["PhyDom"]]
+    }
+    epg2 = {
+      name = "VLAN9-EPG"
+      annotation = "Tenant1-Dev-Network-VLAN9-EPG"
+      application_dn = module.tier3.App-Profiles["TENANT1/Dev-Network"]
+      bridge_domain_dn = module.tier3.Bridge-Domains["TENANT1/VLAN9-BD"]
+      pref_gr_memb = "exclude"
+      domain_dn_list = [module.tier1.PhyDoms["PhyDom"]]
+    }
+    epg3 = {
+      name = "VLAN2-EPG"
+      annotation = "Tenant2-Production-Network-VLAN2-EPG"
+      application_dn = module.tier3.App-Profiles["TENANT2/Production-Network"]
+      bridge_domain_dn = module.tier3.Bridge-Domains["TENANT2/VLAN2-BD"]
+      pref_gr_memb = "exclude"
+      domain_dn_list = [module.tier1.PhyDoms["PhyDom"]]
+    }
+  }
+
+  # EPG Static Paths
+  # MODES: regular (trunk), untagged (Access), native (802.1P)
+  # IMMEDIACY: immediate, lazy (on demand)
+  epg_static_paths = {
+    path1 = {
+      application_epg_dn = module.tier3.EPGs["Tenant1-Production-Network-VLAN5-EPG"]
+      tDn = "topology/pod-1/paths-201/pathep-[eth1/1]"
+      encap = "vlan-5"
+      mode = "untagged"
+      immediacy = "immediate"
+      micro_seg_primary_encap = null
+    }
+    path2 = {
+      application_epg_dn = module.tier3.EPGs["Tenant1-Production-Network-VLAN5-EPG"]
+      tDn = "topology/pod-1/paths-201/pathep-[eth1/2]"
+      encap = "vlan-5"
+      mode = "regular"
+      immediacy = "lazy"
+      micro_seg_primary_encap = "vlan-555"
+    }
   }
 }
-
-// output "log" {
-//   value = module.tier3.VRFs["TENANT1/PROD-VRF"]
-// }

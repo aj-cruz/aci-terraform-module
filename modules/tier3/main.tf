@@ -34,3 +34,32 @@ resource "aci_bridge_domain" "BDs" {
     arp_flood = each.value.arp_flood
     unk_mac_ucast_act = each.value.L2_unknown_unicast
 }
+
+resource "aci_application_profile" "APPs" {
+    depends_on = [aci_tenant.tenants]
+    for_each = var.app_profiles
+    name = each.value.name
+    tenant_dn = each.value.tenant_dn
+}
+
+resource "aci_application_epg" "EPGs" {
+    depends_on = [aci_tenant.tenants]
+    for_each = var.EPGs
+    name = each.value.name
+    annotation = each.value.annotation
+    application_profile_dn = each.value.application_dn
+    pref_gr_memb = each.value.pref_gr_memb
+    relation_fv_rs_bd = each.value.bridge_domain_dn
+    relation_fv_rs_dom_att = each.value.domain_dn_list
+}
+
+resource "aci_epg_to_static_path" "paths" {
+    depends_on = [aci_application_epg.EPGs]
+    for_each = var.epg_static_paths
+    application_epg_dn = each.value.application_epg_dn
+    tdn = each.value.tDn
+    encap = each.value.encap
+    mode = each.value.mode
+    instr_imedcy = each.value.immediacy
+    primary_encap = each.value.micro_seg_primary_encap
+}
