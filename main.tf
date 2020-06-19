@@ -390,4 +390,63 @@ module "tier3" {
       micro_seg_primary_encap = "vlan-555"
     }
   }
+
+  # Raw REST to attach Application EPGs to AAEPs
+  # Add "mode" : "untagged" to infraRsFuncToEpg to configure Access Mode, remove attribute for trunk
+  # If you add a new attribute (like mode), don't forget to add a comma after the previous attribute
+  epg_to_aaep = {
+    relation1 = {
+      path = "/api/node/mo/uni/infra/attentp-Physical-AAEP/gen-default.json"
+      payload = <<EOF
+      {
+          "infraGeneric": {
+              "attributes": {
+                  "dn": "uni/infra/attentp-Physical-AAEP/gen-default",
+                  "name": "default",
+                  "status": "created,modified"
+              },
+              "children": [
+                  {
+                      "infraRsFuncToEpg": {
+                          "attributes": {
+                              "tDn": "uni/tn-TENANT1/ap-Production-Network/epg-VLAN5-EPG",
+                              "status": "created,modified",
+                              "encap": "vlan-5"
+                          },
+                          "children": []
+                      }
+                  }
+              ]
+          }
+      }
+        EOF
+    }
+    relation2 = {
+      path = "/api/node/mo/uni/infra/attentp-L3Out-AAEP/gen-default.json"
+      payload = <<EOF
+      {
+          "infraGeneric": {
+              "attributes": {
+                  "dn": "uni/infra/attentp-L3Out-AAEP/gen-default",
+                  "name": "default",
+                  "status": "created,modified"
+              },
+              "children": [
+                  {
+                      "infraRsFuncToEpg": {
+                          "attributes": {
+                              "tDn": "uni/tn-TENANT1/ap-Dev-Network/epg-VLAN9-EPG",
+                              "status": "created,modified",
+                              "encap": "vlan-9",
+                              "mode": "untagged"
+                          },
+                          "children": []
+                      }
+                  }
+              ]
+          }
+      }
+        EOF
+    }
+  }
 }

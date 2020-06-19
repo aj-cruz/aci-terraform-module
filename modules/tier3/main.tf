@@ -63,3 +63,10 @@ resource "aci_epg_to_static_path" "paths" {
     instr_imedcy = each.value.immediacy
     primary_encap = each.value.micro_seg_primary_encap
 }
+
+resource "aci_rest" "attach_epg_to_aaep" {
+    depends_on = [aci_application_epg.EPGs]
+    for_each = var.epg_to_aaep
+    path = each.value.path
+    payload = each.value.payload
+}

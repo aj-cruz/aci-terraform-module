@@ -51,3 +51,10 @@ variable "epg_static_paths" {
     micro_seg_primary_encap = string
   }))
 }
+
+variable "epg_to_aaep" {
+  type = map(object({
+    path = string
+    payload = string
+  }))
+}
