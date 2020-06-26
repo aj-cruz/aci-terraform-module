@@ -2,6 +2,7 @@ variable "tenants" {
   type = map(object({
     name = string
   }))
+  default = {}
 }
 
 variable "VRFs" {
@@ -11,6 +12,7 @@ variable "VRFs" {
     enforcement = string
     preferred_group = string
   }))
+  default = {}
 }
 
 variable "BDs" {
@@ -21,6 +23,7 @@ variable "BDs" {
     vrf_dn = string
     L2_unknown_unicast = string
   }))
+  default = {}
 }
 
 variable "app_profiles" {
@@ -28,6 +31,7 @@ variable "app_profiles" {
     name = string
     tenant_dn = string
   }))
+  default = {}
 }
 
 variable "EPGs" {
@@ -39,6 +43,7 @@ variable "EPGs" {
     pref_gr_memb = string
     domain_dn_list = list(string)
   }))
+  default = {}
 }
 
 variable "epg_static_paths" {
@@ -50,11 +55,19 @@ variable "epg_static_paths" {
     immediacy = string
     micro_seg_primary_encap = string
   }))
+  default = {}
 }
 
-variable "epg_to_aaep" {
-  type = map(object({
-    path = string
-    payload = string
-  }))
-}
+// variable "epg_to_aaep" {
+//   type = map(object({
+//     path = string
+//     payload = string
+//   }))
+// }
+
+// variable "epg_to_aaep" {
+//   type = map(object({
+//     aaep_dn = string
+//     epg_dn = list(string)
+//   }))
+// }

@@ -31,7 +31,6 @@ resource "aci_access_port_selector" "Access-Port-Selectors" {
     name = each.value.name
     leaf_interface_profile_dn = each.value.int_pro
     access_port_selector_type = each.value.type
-    # This is broken for now, waiting on fix from provider (can't add policy group)
     relation_infra_rs_acc_base_grp = each.value.int_grp
 }
 

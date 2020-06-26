@@ -5,6 +5,7 @@ variable "access_pol_grps" {
     cdp_pol = string
     lldp_pol = string
   }))
+  default = {}
 }
 
 variable "pc_pol_grps" {
@@ -16,12 +17,14 @@ variable "pc_pol_grps" {
     lldp_pol = string
     lacp_pol = string
   }))
+  default = {}
 }
 
 variable "leaf_int_profiles" {
   type = map(object({
     name = string
   }))
+  default = {}
 }
 
 variable "access_port_selectors" {
@@ -34,6 +37,7 @@ variable "access_port_selectors" {
     from = list(number)
     to = list(number)
   }))
+  default = {}
 }
 
 
@@ -42,6 +46,7 @@ variable "leaf_switch_profiles" {
     name = string
     int_selector_profile_dn_list = list(string)
   }))
+  default = {}
 }
 
 variable "switch_associations" {
@@ -50,4 +55,5 @@ variable "switch_associations" {
     leaf_pro_dn = string
     type = string
   }))
+  default = {}
 }

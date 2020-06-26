@@ -6,6 +6,7 @@ variable "vpc_protection_groups" {
     policy = string
     id = string
   }))
+  default = {}
 }
 
 variable "lldp_policies" {
@@ -14,6 +15,7 @@ variable "lldp_policies" {
     receive = string
     transmit = string
   }))
+  default = {}
 }
 
 variable "cdp_policies" {
@@ -21,6 +23,7 @@ variable "cdp_policies" {
     name = string
     state = string
   }))
+  default = {}
 }
 
 variable "lacp_policies" {
@@ -35,6 +38,7 @@ variable "vlan_pools" {
     name = string
     alloc_mode = string
   }))
+  default = {}
 }
 
 variable "encap_blocks" {
@@ -43,6 +47,7 @@ variable "encap_blocks" {
     from = string
     to = string
   }))
+  default = {}
 }
 
 variable "phydoms" {
@@ -50,6 +55,7 @@ variable "phydoms" {
     name = string
     vpool = string
   }))
+  default = {}
 }
 
 variable "l3odoms" {
@@ -57,18 +63,13 @@ variable "l3odoms" {
     name = string
     vpool = string
   }))
+  default = {}
 }
 
-variable "paaeps" {
+variable "aaeps" {
   type = map(object({
     name = string
     domains = list(string)
   }))
-}
-
-variable "l3oaaeps" {
-  type = map(object({
-    name = string
-    domains = list(string)
-  }))
+  default = {}
 }

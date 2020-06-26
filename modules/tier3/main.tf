@@ -64,9 +64,15 @@ resource "aci_epg_to_static_path" "paths" {
     primary_encap = each.value.micro_seg_primary_encap
 }
 
-resource "aci_rest" "attach_epg_to_aaep" {
-    depends_on = [aci_application_epg.EPGs]
-    for_each = var.epg_to_aaep
-    path = each.value.path
-    payload = each.value.payload
-}
+// resource "aci_rest" "attach_epg_to_aaep" {
+//     depends_on = [aci_application_epg.EPGs]
+//     for_each = var.epg_to_aaep
+//     path = each.value.path
+//     payload = each.value.payload
+// }
+
+// resource "aci_vlan_encapsulationfor_vxlan_traffic" "aaep" {
+//     for_each = var.epg_to_aaep
+//     attachable_access_entity_profile_dn = each.value.aaep_dn
+//     relation_infra_rs_func_to_epg = each.value.epg_dn
+// }

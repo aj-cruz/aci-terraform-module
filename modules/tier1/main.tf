@@ -61,16 +61,9 @@ resource "aci_l3_domain_profile" "L3ODom" {
   relation_infra_rs_vlan_ns = each.value.vpool
 }
 
-resource "aci_attachable_access_entity_profile" "Physical-AAEPs" {
-  depends_on = [aci_physical_domain.PhyDom]
-  for_each = var.paaeps
-  name  = each.value.name
-  relation_infra_rs_dom_p = each.value.domains
-}
-
-resource "aci_attachable_access_entity_profile" "L3Out-AAEPs" {
-  depends_on = [aci_l3_domain_profile.L3ODom]
-  for_each = var.l3oaaeps
+resource "aci_attachable_access_entity_profile" "AAEPs" {
+  depends_on = [aci_physical_domain.PhyDom,aci_l3_domain_profile.L3ODom]
+  for_each = var.aaeps
   name  = each.value.name
   relation_infra_rs_dom_p = each.value.domains
 }

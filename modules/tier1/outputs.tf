@@ -19,16 +19,9 @@ output "L3ODoms" {
     }
 }
 
-output "Physical-AAEPs" {
+output "AAEPs" {
     value = {
-        for aaep in aci_attachable_access_entity_profile.Physical-AAEPs:
-        aaep["name"] => aaep["id"]
-    }
-}
-
-output "L3Out-AAEPs" {
-    value = {
-        for aaep in aci_attachable_access_entity_profile.L3Out-AAEPs:
+        for aaep in aci_attachable_access_entity_profile.AAEPs:
         aaep["name"] => aaep["id"]
     }
 }
