@@ -1,8 +1,8 @@
 
 provider "aci" {
 	username = "admin"
-	password = "ajlab.local"
-	url = "https://192.168.253.17"
+	password = ""
+	url = ""
 	insecure = true
 }
 
