@@ -66,6 +66,16 @@ variable "l3odoms" {
   default = {}
 }
 
+variable "vmmdoms" {
+  type = map(object({
+    provider = string
+    name = string
+    vpool = string
+    access_mode = string
+  }))
+  default = {}
+}
+
 variable "aaeps" {
   type = map(object({
     name = string

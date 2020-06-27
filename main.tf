@@ -131,6 +131,15 @@ module "tier1" {
 		}
 	}
 
+  vmmdoms = {
+		dom1 = {
+			provider = "uni/vmmp-VMware"
+      name = "VMM-Dom"
+			vpool = module.tier1.VLAN-Pools["VMM-VLAN-Pool"]
+      access_mode = "read-write"
+		}
+	}
+
 	aaeps = {
 		paaep1 = {
 			name = "Phys-AAEP"
@@ -138,7 +147,7 @@ module "tier1" {
 		}
 		paaep2 = {
 			name = "VMM-AAEP"
-			domains = []
+			domains = [module.tier1.VMMDoms["VMM-Dom"]]
 		}
 		paaep3 = {
 			name = "External-AAEP"

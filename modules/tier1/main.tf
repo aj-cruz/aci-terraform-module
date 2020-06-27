@@ -61,8 +61,17 @@ resource "aci_l3_domain_profile" "L3ODom" {
   relation_infra_rs_vlan_ns = each.value.vpool
 }
 
+resource "aci_vmm_domain" "VMMDom" {
+  depends_on = [aci_vlan_pool.VLAN-Pools]
+  for_each = var.vmmdoms
+  provider_profile_dn = each.value.provider
+  name  = each.value.name
+  relation_infra_rs_vlan_ns = each.value.vpool
+  access_mode = each.value.access_mode
+}
+
 resource "aci_attachable_access_entity_profile" "AAEPs" {
-  depends_on = [aci_physical_domain.PhyDom,aci_l3_domain_profile.L3ODom]
+  depends_on = [aci_physical_domain.PhyDom,aci_l3_domain_profile.L3ODom,aci_vmm_domain.VMMDom]
   for_each = var.aaeps
   name  = each.value.name
   relation_infra_rs_dom_p = each.value.domains

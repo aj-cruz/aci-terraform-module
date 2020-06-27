@@ -19,6 +19,13 @@ output "L3ODoms" {
     }
 }
 
+output "VMMDoms" {
+    value = {
+        for dom in aci_vmm_domain.VMMDom:
+        dom["name"] => dom["id"]
+    }
+}
+
 output "AAEPs" {
     value = {
         for aaep in aci_attachable_access_entity_profile.AAEPs:
