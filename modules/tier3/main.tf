@@ -25,6 +25,17 @@ resource "aci_any" "any" {
     pref_gr_memb = each.value.preferred_group
 }
 
+resource "aci_l3_outside" "L3Outs" {
+    depends_on = [aci_tenant.tenants,aci_vrf.vrfs]
+    for_each = var.L3Os
+    tenant_dn      = each.value.tenant_dn
+    description    = each.value.description
+    name           = each.value.name
+    enforce_rtctrl = each.value.rtctrl
+    relation_l3ext_rs_l3_dom_att = each.value.domain
+    relation_l3ext_rs_ectx = each.value.vrf
+}
+
 resource "aci_bridge_domain" "BDs" {
     depends_on = [aci_tenant.tenants]
     for_each = var.BDs

@@ -15,6 +15,18 @@ variable "VRFs" {
   default = {}
 }
 
+variable "L3Os" {
+  type = map(object({
+    tenant_dn      = string
+    description    = string
+    name           = string
+    rtctrl         = string
+    domain         = string
+    vrf            = string
+  }))
+  default = {}
+}
+
 variable "BDs" {
   type = map(object({
     name = string
