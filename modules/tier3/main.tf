@@ -36,6 +36,15 @@ resource "aci_l3_outside" "L3Outs" {
     relation_l3ext_rs_ectx = each.value.vrf
 }
 
+resource "aci_external_network_instance_profile" "EPGs" {
+        depends_on = [aci_l3_outside.L3Outs]
+        for_each = var.L3Os
+        l3_outside_dn  = aci_l3_outside.L3Outs[each.key].id
+        description    = ""
+        name           = each.value.epg_name
+        pref_gr_memb   = each.value.pref_gr_memb
+    }
+
 resource "aci_bridge_domain" "BDs" {
     depends_on = [aci_tenant.tenants]
     for_each = var.BDs

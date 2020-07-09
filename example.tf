@@ -2,8 +2,8 @@
 # Cisco ACI Credentials
 provider "aci" {
 	username = "admin"
-	password = "ajlab.local"
-	url = "https://192.168.253.17"
+	password = "password"
+	url = "https://"
 	insecure = true
 }
 
@@ -20,6 +20,27 @@ module "tier1" {
 			switch2 = "202"
 			policy = "default"
 			id = "201"
+		}
+		group2 = {
+			name = "LEAF3-LEAF4-VPC"
+			switch1 = "203"
+			switch2 = "204"
+			policy = "default"
+			id = "203"
+		}
+		group3 = {
+			name = "LEAF5-LEAF6-VPC"
+			switch1 = "205"
+			switch2 = "206"
+			policy = "default"
+			id = "205"
+		}
+		group4 = {
+			name = "LEAF7-LEAF8-VPC"
+			switch1 = "207"
+			switch2 = "208"
+			policy = "default"
+			id = "207"
 		}
 	}
 
@@ -419,7 +440,7 @@ module "tier3" {
 			name = "Prod-VRF"
 			tenant_dn = module.tier3.Tenants["AJLAB-Prod"]
 			enforcement = "enforced"
-			preferred_group = "disabled"
+			preferred_group = "enabled"
 		}
 		vrf2 = {
 			name = "Dev-VRF"
@@ -438,6 +459,8 @@ module "tier3" {
 			rtctrl 		   = "export"
 			domain 		   = module.tier1.L3ODoms["L3Out-Dom"]
 			vrf			   = module.tier3.VRFs["AJLAB-Prod/Prod-VRF"]
+			epg_name	   = "Prod-OSPF-L3Out-EPG"
+			pref_gr_memb   = "exclude"
 		}
 		l3o2 = {
 			tenant_dn      = module.tier3.Tenants["AJLAB-Prod"]
@@ -446,6 +469,8 @@ module "tier3" {
 			rtctrl 		   = "export"
 			domain 		   = module.tier1.L3ODoms["L3Out-Dom"]
 			vrf			   = module.tier3.VRFs["AJLAB-Prod/Dev-VRF"]
+			epg_name	   = "Dev-OSPF-L3Out-EPG"
+			pref_gr_memb   = "include"
 		}
 	}
 
@@ -545,4 +570,3 @@ module "tier3" {
 	}
 
 }
-

@@ -17,6 +17,13 @@ output "VRFs" {
     }
 }
 
+output "L3Outs" {
+    value = {
+        for l3o in aci_l3_outside.L3Outs:
+        l3o["name"] => l3o["id"]
+    }
+}
+
 output "App-Profiles" {
     # Since App Profiles can have the same name I will append the key with the tenant separated with a slash
     # EXAMPLE: TENANT1/Production-Network

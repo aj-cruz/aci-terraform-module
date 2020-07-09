@@ -23,6 +23,8 @@ variable "L3Os" {
     rtctrl         = string
     domain         = string
     vrf            = string
+    epg_name	     = string
+		pref_gr_memb	 = string
   }))
   default = {}
 }
